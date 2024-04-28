@@ -13,7 +13,7 @@ let map = L.map("map", {
 
 // thematische Layer
 let themaLayer = {
-    stations: L.featureGroup().addTo(map)
+    stations: L.featureGroup().addTo(map),
 }
 
 // Hintergrundlayer
@@ -47,18 +47,27 @@ async function showStations(url) {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
                 icon: L.icon({
-                    iconUrl: `icons/wifi.png`,
+                    iconUrl: "icons/wifi.png",
                     iconAnchor: [16, 37],
                     popupAnchor: [0, -37]
                 })
-            })
-        },
-
-        onEachFeature: function (feature, layer) {
-      
-
-}
+            });
+            },
+            onEachFeature: function (feature, layer) {
+                console.log(feature);
+                console.log(feature.properties.NAME);
+                layer.bindPopup (`
+               <h4> $${feature.properties.NAME} (${feature.properties.coordinates}m) </h4>
+               <br>
+               <ul>
+               <li> Lufttemperatur (°C) </li>
+               <li> Relative Luftfeuchte </li>
+               <li> Windgeschwindigkeit (km/h) </li>
+               <li> Schneehöhe(cm) </li>
+               </ul>
+               $${feature.properties.NAME}
+                `);
+              }
+             }).addTo (themaLayer.sights);
+            }
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
- 
-    
-    showStations("https://static.avalanche.report/weather_stations/stations.geojson");
